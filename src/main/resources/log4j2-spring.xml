@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="springboot" packages="com.example.arch.logger">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n" />
+        </Console>
+
+		<EventHubAppender name="azureeventhub"
+                           connectionString="Endpoint=sb://esb-logging-eh-ns.servicebus.windows.net/;SharedAccessKeyName=appenderuser;SharedAccessKey=i7WJQ/gOFXOdjU3XY6UzN7/GvngIQxFJZEwJT1EEZcM=;EntityPath=eventhubappender"
+                           prefix1="${env:COMPUTERNAME}"
+                           prefix2="${env:USERNAME}">
+            <JSONLayout complete="true" compact="false"/>
+            <!--  
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+            -->
+        </EventHubAppender>
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <AsyncRoot level="INFO">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="azureeventhub" />
+        </AsyncRoot>
+
+    </Loggers>
+
+</Configuration>
